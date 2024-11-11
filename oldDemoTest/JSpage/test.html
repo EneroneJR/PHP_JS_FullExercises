@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sofferenza</title>
+    </head>
+    <body>
+        <div id="House">
+            <h1>Questo serve solo a capire qualcosa a chi lo ha scritto per la prima volta</h1><br/><br/>
+        </div>
+        
+        <div id="help">
+            <h1>Questo dovrebbe scomparire ed esser sostituito</h1>
+            <button type="button" onclick="provaFunzione()">Prova</button>
+        </div><br/><br/>
+
+
+        <div>
+            <table>
+                <tbody id = "table">
+                    <tr>
+                        <th>Email</th>
+                        <th>Nome</th>
+                        <th>Cognome</th>
+                        <th>Password</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div id = "add">
+            <button type="button" onclick="Show()">Aggiungi</button><br/><br/>
+            <p id="messagehelp">I dati sono stati inseriti correttamente</p>
+            <div class = "addForm" id="addForm">
+                    <div>
+                        Nome: <input type="text" id="name"><br/>
+                        Cognome: <input type="text" id="surname"><br/>
+                        E-Mail: <input type="text" id="email"><br/>
+                        Password: <input type="text" id="password"><br/>
+                        <button type="submit" onclick="Aggiungi()">invia</button>
+                    </div>
+                <button type="button" onclick="Show()">Indietro</button>
+            </div>
+        </div>
+
+        <script>
+            function provaFunzione()
+            {
+                const xhttp = new XMLHttpRequest(); // Questa cosa è letteralmente l'istanziazione in angular di un HttpRequest
+
+                xhttp.onload = function() // questa è una funzione per spiegare cosa dovrebbe succedere nel momento in cui chiamo la funzione
+                {
+                    //document.getElementById("help").innerHTML = this.responseText;
+                    document. // chiamo che sto prendendo un documento
+                    getElementById("help"). // indico tramite Id quale elemento sto scegliendo da modificare
+                    innerHTML = // indico che ci voglio fare (tipo modifico il file interno)
+                    this.responseText; // indico la rispostache voglio sostituisca cosa e come
+                }
+
+                xhttp.open("GET", "../table.php"); // apro una richiesta da eseguire. Con il metodo che chiamo e il file che scelgo
+                xhttp.send(); // invio la richiesta
+            }
+
+           window.onload = function()
+           {
+                const xhttp = new XMLHttpRequest(); // Questa cosa è letteralmente l'istanziazione in angular di un HttpRequest
+
+                xhttp.onload = function() // questa è una funzione per spiegare cosa dovrebbe succedere nel momento in cui chiamo la funzione
+                {
+                    /*
+                    //document.getElementById("help").innerHTML = this.responseText;
+                    document. // chiamo che sto prendendo un documento
+                    getElementById("help"). // indico tramite Id quale elemento sto scegliendo da modificare
+                    innerHTML = // indico che ci voglio fare (tipo modifico il file interno)
+                    this.responseText; // indico la rispostache voglio sostituisca cosa e come
+                    */
+                   //var r = JSON.parse(this.responseText); Se non funziona questo metodo è perchè la risposta del php non è completamente un oggetto JSON
+
+                    var r = JSON.parse(this.responseText);
+
+                    for(let i = 0; i < r.length; i++)
+                    {
+                        
+                        var name = r[i].name;
+                        var surname = r[i].surname;
+                        var email = r[i].email;
+                        var password = r[i].password;
+                        
+                        document. // chiamo che sto prendendo un documento
+                        getElementById("table"). // indico tramite Id quale elemento sto scegliendo da modificare
+                        innerHTML += //1].name; // Boh, questo funziona
+                        /*`<tr>
+                        <td>${r[i].name}<td> // MA COSÌ NO. OK JAVASCRIPT
+                        <td>${r[i].surname}<td>
+                        <td>${r[i].email}<td>
+                        <td>${r[i].password}<td>
+                        </tr>`;*/
+                        `<tr>
+                            <td><b>${email}</td> <!-- Si. volevo divertirmi con i font -->
+                            <td><i>${name}</td> <!-- Sì, so che questo si sta ripetendo per ogni colonna -->
+                            <td>${surname}</td> <!-- No, non lo sistemerò -->
+                            <td>${password}</td> <!-- Sì, so l'odio che stai provando -->
+                            <td>
+                                <form action="/demo/modify/modify.php" method="GET">
+                                    <input type="hidden" value="${email}" name="email">
+                                    <button class="modify" type="submit">Modifica</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/demo/delete/deleteData.php" method="GET">
+                                    <input type="hidden" value="${email}" name="email">
+                                    <button class="delete" type="submit">Elimina</button>
+                                </form>
+                            </td>
+                        </tr>`;
+                    }
+                       
+
+                }
+
+                xhttp.open("GET", "../newtablepage/sendata.php"); // apro una richiesta da eseguire. Con il metodo che chiamo e il file che scelgo
+                xhttp.send(); // invio la richiesta
+
+                location.href;
+            }
+
+            function Show()
+            {
+                var x = document.getElementById("addForm");
+                if(x.style.display == "none")
+                {
+                    x.style.display = "block";
+                }else
+                {
+                    x.style.display = "none";
+                }
+                document.getElementById("messagehelp").style.display = "none";
+            }
+
+            function Aggiungi()
+            {
+                var http = new XMLHttpRequest();
+
+                name = document.getElementById("name").value;
+                surname = document.getElementById("surname").value;
+                password = document.getElementById("password").value;
+                email = document.getElementById("email").value;
+
+                http.onload = function()
+                {
+                    if(this.status == 200)
+                    {
+                        Show();
+                        document.getElementById("messagehelp").style.display = "block";
+                        // location.replace(); non funziona per rifare il refresh
+                        // location.href; nada
+                        
+                        //location.reload(); Questa funziona alla perfezione
+
+                        //provaFunzione(); // Scorciatoia per aggiornare la tabella
+
+                        // aggiungere i dati tramite Java script avendo risposta positiva direttamente da JS
+                        document.getElementById("table").innerHTML += 
+                        `<tr>
+                            <td><b>${name}</td> <!-- Si. volevo divertirmi con i font -->
+                            <td><i>${surname}</td> <!-- Sì, so che questo si sta ripetendo per ogni colonna -->
+                            <td>${email}</td> <!-- No, non lo sistemerò -->
+                            <td>${password}</td> <!-- Sì, so l'odio che stai provando -->
+                            <td>
+                                <form action="/demo/modify/modify.php" method="GET">
+                                    <input type="hidden" value="${email}" name="email">
+                                    <button class="modify" type="submit">Modifica</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/demo/delete/deleteData.php" method="GET">
+                                    <input type="hidden" value="${email}" name="email">
+                                    <button class="delete" type="submit">Elimina</button>
+                                </form>
+                            </td>
+                        </tr>`;
+                    }else
+                    {
+                        document.getElementById("add").innerHtml = this.responseText;
+                    }
+                }
+
+                http.open("POST", "../sendData/sendata.php?=");
+                http.setRequestHeader("name", name);
+                http.setRequestHeader("password", password);
+                http.setRequestHeader("surname", surname);
+                http.setRequestHeader("email", email)
+                http.send();
+            }
+        </script>
+        <style>
+            .addForm{
+                display: none;
+            }
+            #messagehelp{
+                display: none;
+            }
+            table,th,td{
+                border: 2px solid;
+            }
+            th{
+                background-color: gray;
+                color: white;
+                border-color: black;
+            }
+            button.modify{
+                background-color: yellow;
+            }
+            button.delete{
+                background-color: red;
+            }
+        </style>
+    </body>
+</html>
